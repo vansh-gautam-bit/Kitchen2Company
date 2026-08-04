@@ -118,5 +118,5 @@ export function validateAIAssessmentResponse(
     }
   }
 
-  return { ok: true, data: r as AIAssessmentResponse };
+  return { ok: true, data: r as unknown as AIAssessmentResponse };
 }

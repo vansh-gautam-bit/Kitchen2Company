@@ -3,7 +3,7 @@ import { withSupabase } from "npm:@supabase/server";
 /**
  * generate-ai-assessment
  * ─────────────────────────
- * Generates a business assessment using OpenAI's GPT model.
+ * Generates a business assessment using AI/ML API's model.
  *
  * Request:  POST { profile: BusinessProfile }
  * Response: { rawAssessment: AIAssessmentResponse }
@@ -15,7 +15,7 @@ import { withSupabase } from "npm:@supabase/server";
  * 4. Returns the raw assessment for client-side mapping
  *
  * Auth: publishable API key (verified by @supabase/server via `apikey`
- * header). The OpenAI API key lives only in Supabase Edge Function
+ * header). The API key lives only in Supabase Edge Function
  * secrets (OPENAI_API_KEY) — never in client code.
  */
 
@@ -154,7 +154,7 @@ Growth Goal: ${profile.growthGoalLabel} (${profile.growthGoal})`;
 
       try {
         const response = await fetch(
-          "https://api.openai.com/v1/chat/completions",
+          "https://api.aimlapi.com/v1/chat/completions",
           {
             method: "POST",
             headers: {

@@ -1,14 +1,16 @@
 {
-  "name": "kitchen2company",
+  "name": "conductor-react-base",
   "private": true,
-  "version": "0.0.0",
+  "version": "1.0.0",
   "type": "module",
   "scripts": {
-    "dev": "vite optimize && vite",
-    "build": "vite build",
+    "dev": "vite",
+    "build": "tsc -b && vite build",
     "preview": "vite preview"
   },
   "dependencies": {
+    "@playwright/cli": "^0.1.17",
+    "@react-pdf/renderer": "^4.5.1",
     "@tailwindcss/vite": "^4.1.18",
     "framer-motion": "^12.43.0",
     "lucide-react": "^1.28.0",
@@ -18,7 +20,6 @@
     "tailwindcss": "^4.1.18"
   },
   "devDependencies": {
-    "@playwright/cli": "^0.1.17",
     "@types/node": "^24.10.1",
     "@types/react": "^18.3.1",
     "@types/react-dom": "^18.3.1",

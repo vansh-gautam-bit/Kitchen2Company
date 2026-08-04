@@ -52,7 +52,7 @@ export const config = {
    * as OPENAI_API_KEY and read only inside the Edge Function.
    */
   aiAssessment: {
-    enabled: false,
+    enabled: true,
 
     apiEndpoint:
       "https://rutxdvsvrjesycgmcekz.supabase.co/functions/v1/generate-ai-assessment",

@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 import { useLocation, Link } from "react-router-dom";
 import { motion } from "framer-motion";
 import {
@@ -16,6 +16,9 @@ import {
   Users,
   ArrowLeft,
   Map,
+  Download,
+  Loader2,
+  AlertTriangle,
 } from "lucide-react";
 import Navbar from "../components/Navbar";
 import Footer from "../components/Footer";
@@ -24,6 +27,8 @@ import type { OfficialResource } from "../types/research";
 import { useBusinessProfile } from "../context/BusinessContext";
 import { generateAssessment } from "../services/assessment";
 import { getResearchService } from "../services/research";
+import { generateRoadmap } from "../services/roadmap";
+import { downloadLaunchReport } from "../utils/downloadPDF";
 
 /* ═══════════════════════════════════════════════════════════════ *
  *  UI COMPONENTS                                                  *
@@ -321,6 +326,37 @@ export default function Dashboard() {
     };
   }, [assessment, researchService]);
 
+  /* ── PDF download state & handler ─────────────────── */
+
+  const [pdfLoading, setPdfLoading] = useState(false);
+  const [pdfError, setPdfError] = useState(false);
+
+  const handleDownloadPDF = useCallback(async () => {
+    if (!profile || !assessment) return;
+
+    setPdfLoading(true);
+    setPdfError(false);
+
+    // Generate the roadmap data that will go into the PDF
+    const roadmap = generateRoadmap(profile, assessment);
+
+    const success = await downloadLaunchReport({
+      profile,
+      assessment,
+      roadmapSteps: roadmap.steps,
+      totalEstimatedDuration: roadmap.totalEstimatedDuration,
+      resources: resources ?? [],
+    });
+
+    setPdfLoading(false);
+    if (!success) setPdfError(true);
+
+    // Auto-dismiss error after 8 seconds
+    if (!success) {
+      setTimeout(() => setPdfError(false), 8_000);
+    }
+  }, [profile, assessment, resources]);
+
   if (!profile || !assessment) {
     return <EmptyState />;
   }
@@ -367,16 +403,53 @@ export default function Dashboard() {
                 </div>
               </div>
 
-              <Link
-                to="/roadmap"
-                state={{ profile, assessment }}
-                className="inline-flex items-center gap-2 rounded-full bg-gradient-emerald px-6 py-3 text-sm font-semibold text-white shadow-md hover:shadow-lg transition-all hover:opacity-90 active:scale-[0.97]"
-              >
-                <Map size={18} />
-                View My Launch Roadmap
-                <ArrowRight size={16} />
-              </Link>
+              <div className="flex flex-wrap items-center gap-3">
+                <Link
+                  to="/roadmap"
+                  state={{ profile, assessment }}
+                  className="inline-flex items-center gap-2 rounded-full bg-gradient-emerald px-6 py-3 text-sm font-semibold text-white shadow-md hover:shadow-lg transition-all hover:opacity-90 active:scale-[0.97]"
+                >
+                  <Map size={18} />
+                  View My Launch Roadmap
+                  <ArrowRight size={16} />
+                </Link>
+
+                <button
+                  type="button"
+                  onClick={handleDownloadPDF}
+                  disabled={pdfLoading}
+                  className="inline-flex items-center gap-2 rounded-full border border-emerald-200 bg-white px-5 py-3 text-sm font-semibold text-emerald-700 shadow-sm transition-all hover:bg-emerald-50 hover:shadow-md active:scale-[0.97] disabled:cursor-not-allowed disabled:opacity-50"
+                >
+                  {pdfLoading ? (
+                    <Loader2 size={18} className="animate-spin" />
+                  ) : (
+                    <Download size={18} />
+                  )}
+                  {pdfLoading ? "Generating PDF…" : "Download PDF"}
+                </button>
+              </div>
             </div>
+
+            {/* ── PDF error banner ──────────────────── */}
+            {pdfError && (
+              <motion.div
+                initial={{ opacity: 0, y: -8 }}
+                animate={{ opacity: 1, y: 0 }}
+                className="mt-4 flex items-center gap-3 rounded-xl border border-red-200 bg-red-50 px-5 py-3 text-sm text-red-700"
+              >
+                <AlertTriangle size={18} className="shrink-0" />
+                <span>
+                  We couldn&apos;t generate your PDF right now. Please try again.
+                </span>
+                <button
+                  type="button"
+                  onClick={() => setPdfError(false)}
+                  className="ml-auto shrink-0 text-sm font-medium text-red-600 hover:text-red-800 transition-colors"
+                >
+                  Dismiss
+                </button>
+              </motion.div>
+            )}
           </motion.div>
 
           {/* Row 1: Business Summary + Business Structure */}
