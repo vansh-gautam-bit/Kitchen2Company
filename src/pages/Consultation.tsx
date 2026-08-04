@@ -1,23 +1,14 @@
 import { useState, useCallback } from "react";
+import { useNavigate } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
 import { ArrowLeft, ArrowRight, Check, Sparkles } from "lucide-react";
 import Navbar from "../components/Navbar";
 import Footer from "../components/Footer";
+import type { BusinessProfile, Question } from "../types/business";
+import { useBusinessProfile } from "../context/BusinessContext";
+import { generateAssessment } from "../services/assessment";
 
 /* ── Question data ─────────────────────────────────────────────── */
-
-interface Option {
-  value: string;
-  label: string;
-}
-
-interface Question {
-  id: string;
-  label: string;
-  question: string;
-  why: string;
-  options: Option[];
-}
 
 const questions: Question[] = [
   {
@@ -95,7 +86,7 @@ const questions: Question[] = [
     ],
   },
   {
-    id: "growth-goals",
+    id: "growth-goal",
     label: "Growth Goals",
     question: "What's your vision for this business?",
     why: "Your ambition level shapes the right business registration, trademark, and funding strategy.",
@@ -108,6 +99,32 @@ const questions: Question[] = [
     ],
   },
 ];
+
+/* ── Helper: transform raw answers → BusinessProfile ──────────── */
+
+function buildProfile(answers: Record<string, string>, questionList: Question[]): BusinessProfile {
+  const findLabel = (id: string): string => {
+    const q = questionList.find((q) => q.id === id);
+    if (!q) return answers[id] ?? "";
+    const opt = q.options.find((o) => o.value === answers[id]);
+    return opt?.label ?? answers[id] ?? "";
+  };
+
+  return {
+    businessType: answers["business-type"] ?? "",
+    businessTypeLabel: findLabel("business-type"),
+    location: answers["location"] ?? "",
+    locationLabel: findLabel("location"),
+    kitchenType: answers["kitchen-type"] ?? "",
+    kitchenTypeLabel: findLabel("kitchen-type"),
+    salesChannels: answers["sales-channels"] ?? "",
+    salesChannelsLabel: findLabel("sales-channels"),
+    teamSize: answers["team-size"] ?? "",
+    teamSizeLabel: findLabel("team-size"),
+    growthGoal: answers["growth-goal"] ?? "",
+    growthGoalLabel: findLabel("growth-goal"),
+  };
+}
 
 /* ── Animation variants ────────────────────────────────────────── */
 
@@ -126,7 +143,7 @@ const slideVariants = {
   }),
 };
 
-/* ── Helper: progress segments ─────────────────────────────────── */
+/* ── Helper: progress dots ────────────────────────────────────── */
 
 function ProgressDots({ total, current }: { total: number; current: number }) {
   return (
@@ -156,6 +173,8 @@ export default function Consultation() {
   const [direction, setDirection] = useState(1);
   const [answers, setAnswers] = useState<Answers>({});
   const [showSummary, setShowSummary] = useState(false);
+  const navigate = useNavigate();
+  const { setProfile, setAssessment } = useBusinessProfile();
 
   const totalSteps = questions.length;
   const current = questions[step];
@@ -190,6 +209,14 @@ export default function Consultation() {
   const canProceed = answers[current.id] !== undefined && answers[current.id] !== "";
 
   const progress = ((step + 1) / totalSteps) * 100;
+
+  const handleLaunchDashboard = useCallback(() => {
+    const profile = buildProfile(answers, questions);
+    const assessment = generateAssessment(profile);
+    setProfile(profile);
+    setAssessment(assessment);
+    navigate("/dashboard", { state: { profile, assessment } });
+  }, [answers, setProfile, setAssessment, navigate]);
 
   /* ── Summary screen ──────────────────────────────────────────── */
 
@@ -263,12 +290,18 @@ export default function Consultation() {
                 <ArrowLeft size={18} />
                 Review Answers
               </button>
-              <a
-                href="/"
+              <button
+                onClick={handleLaunchDashboard}
                 className="inline-flex items-center gap-2 rounded-full bg-gradient-emerald px-8 py-3.5 text-base font-semibold text-white shadow-lg hover:shadow-xl transition-all hover:opacity-90"
               >
-                Back to Home
+                Launch Dashboard
                 <ArrowRight size={18} />
+              </button>
+              <a
+                href="/"
+                className="inline-flex items-center gap-2 rounded-full border border-border-light bg-white px-6 py-3 text-sm font-medium text-text-muted hover:text-emerald-600 hover:border-emerald-200 transition-all"
+              >
+                Back to Home
               </a>
             </motion.div>
           </div>
