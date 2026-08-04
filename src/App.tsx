@@ -2,6 +2,7 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Landing from "./pages/Landing";
 import Consultation from "./pages/Consultation";
 import Dashboard from "./pages/Dashboard";
+import Roadmap from "./pages/Roadmap";
 import { BusinessProvider } from "./context/BusinessContext";
 
 export default function App() {
@@ -12,6 +13,7 @@ export default function App() {
         <Route path="/" element={<Landing />} />
         <Route path="/consultation" element={<Consultation />} />
         <Route path="/dashboard" element={<Dashboard />} />
+        <Route path="/roadmap" element={<Roadmap />} />
         <Route
           path="*"
           element={

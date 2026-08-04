@@ -1,3 +1,4 @@
+import { useEffect, useMemo, useState } from "react";
 import { useLocation, Link } from "react-router-dom";
 import { motion } from "framer-motion";
 import {
@@ -14,12 +15,15 @@ import {
   User,
   Users,
   ArrowLeft,
+  Map,
 } from "lucide-react";
 import Navbar from "../components/Navbar";
 import Footer from "../components/Footer";
 import type { BusinessProfile, BusinessAssessment, Registration, Resource } from "../types/business";
+import type { OfficialResource } from "../types/research";
 import { useBusinessProfile } from "../context/BusinessContext";
 import { generateAssessment } from "../services/assessment";
+import { getResearchService } from "../services/research";
 
 /* ═══════════════════════════════════════════════════════════════ *
  *  UI COMPONENTS                                                  *
@@ -196,6 +200,33 @@ function ResourceLink({ name, url, description }: Resource) {
   );
 }
 
+/* ── Loading skeleton for official resources ──────────── */
+
+function ResourceSkeleton() {
+  return (
+    <div className="flex animate-pulse items-start gap-3 rounded-xl border border-border-light p-4">
+      <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-border-light" />
+      <div className="min-w-0 flex-1 space-y-2 pt-0.5">
+        <div className="h-3.5 w-2/5 rounded bg-border-light" />
+        <div className="h-3 w-4/5 rounded bg-border-light" />
+      </div>
+    </div>
+  );
+}
+
+/* ── Resources error / empty state ────────────────────── */
+
+function ResourceEmptyState() {
+  return (
+    <div className="rounded-xl border border-dashed border-border-light p-6 text-center">
+      <p className="text-sm font-medium text-text-primary">Unable to load resources</p>
+      <p className="mt-1 text-xs text-text-muted">
+        We couldn&apos;t fetch official portals right now. Check your connection and try again.
+      </p>
+    </div>
+  );
+}
+
 /* ── Empty state ──────────────────────────────────────── */
 
 function EmptyState() {
@@ -251,8 +282,44 @@ export default function Dashboard() {
   // Read from router state first, fall back to context
   const state = location.state as { profile?: BusinessProfile; assessment?: BusinessAssessment } | undefined;
   const profile: BusinessProfile | null = state?.profile ?? contextProfile ?? null;
+
+  // Stabilise the fallback identity so the research effect (below) doesn't re-run on every render.
+  const fallbackAssessment = useMemo(
+    () => (profile ? generateAssessment(profile) : null),
+    [profile],
+  );
   const assessment: BusinessAssessment | null =
-    state?.assessment ?? contextAssessment ?? (profile ? generateAssessment(profile) : null);
+    state?.assessment ?? contextAssessment ?? fallbackAssessment;
+
+  /* ── Official Resources (async via Research Service) ─── */
+
+  const researchService = useMemo(() => getResearchService(), []);
+  const [resources, setResources] = useState<OfficialResource[] | null>(null);
+
+  useEffect(() => {
+    if (!assessment) return;
+
+    let cancelled = false;
+    const controller = new AbortController();
+
+    setResources(null); // enter loading state
+
+    researchService
+      .fetchOfficialResources(assessment, controller.signal)
+      .then((result) => {
+        if (!cancelled) setResources(result);
+      })
+      .catch((error) => {
+        // AbortError is expected on unmount — silently ignore
+        if (cancelled || (error instanceof DOMException && error.name === "AbortError")) return;
+        if (!cancelled) setResources([]);
+      });
+
+    return () => {
+      cancelled = true;
+      controller.abort();
+    };
+  }, [assessment, researchService]);
 
   if (!profile || !assessment) {
     return <EmptyState />;
@@ -285,18 +352,30 @@ export default function Dashboard() {
             animate={{ opacity: 1, y: 0 }}
             className="mb-10"
           >
-            <div className="flex items-center gap-3">
-              <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-gradient-emerald text-white shadow-lg">
-                <Sparkles size={24} />
+            <div className="flex flex-wrap items-center justify-between gap-4">
+              <div className="flex items-center gap-3">
+                <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-gradient-emerald text-white shadow-lg">
+                  <Sparkles size={24} />
+                </div>
+                <div>
+                  <h1 className="text-2xl sm:text-3xl font-bold tracking-tight text-text-primary">
+                    Your Launch Dashboard
+                  </h1>
+                  <p className="mt-1 text-text-muted">
+                    Your personalised launch roadmap — based on your consultation answers.
+                  </p>
+                </div>
               </div>
-              <div>
-                <h1 className="text-2xl sm:text-3xl font-bold tracking-tight text-text-primary">
-                  Your Launch Dashboard
-                </h1>
-                <p className="mt-1 text-text-muted">
-                  Your personalised launch roadmap — based on your consultation answers.
-                </p>
-              </div>
+
+              <Link
+                to="/roadmap"
+                state={{ profile, assessment }}
+                className="inline-flex items-center gap-2 rounded-full bg-gradient-emerald px-6 py-3 text-sm font-semibold text-white shadow-md hover:shadow-lg transition-all hover:opacity-90 active:scale-[0.97]"
+              >
+                <Map size={18} />
+                View My Launch Roadmap
+                <ArrowRight size={16} />
+              </Link>
             </div>
           </motion.div>
 
@@ -393,9 +472,19 @@ export default function Dashboard() {
             <Card delay={0.3}>
               <CardHeader icon={ExternalLink} title="Official Resources" subtitle="Government portals" />
               <div className="space-y-3">
-                {assessment.resources.map((r) => (
-                  <ResourceLink key={r.name} {...r} />
-                ))}
+                {resources === null ? (
+                  <>
+                    <ResourceSkeleton />
+                    <ResourceSkeleton />
+                    <ResourceSkeleton />
+                  </>
+                ) : resources.length === 0 ? (
+                  <ResourceEmptyState />
+                ) : (
+                  resources.map((r) => (
+                    <ResourceLink key={r.id} name={r.name} url={r.url} description={r.description} />
+                  ))
+                )}
               </div>
             </Card>
           </div>
