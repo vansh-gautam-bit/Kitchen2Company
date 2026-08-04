@@ -27,6 +27,7 @@ export function getResearchService(): ResearchService {
     ? new BrightDataResearchService({
         enabled: config.brightData.enabled,
         apiEndpoint: config.brightData.apiEndpoint,
+        publishableKey: config.supabase.publishableKey,
       })
     : new PlaceholderResearchService();
 

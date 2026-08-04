@@ -1,12 +1,12 @@
 import { useState, useCallback } from "react";
 import { useNavigate } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
-import { ArrowLeft, ArrowRight, Check, Sparkles } from "lucide-react";
+import { ArrowLeft, ArrowRight, Check, Sparkles, Loader2 } from "lucide-react";
 import Navbar from "../components/Navbar";
 import Footer from "../components/Footer";
 import type { BusinessProfile, Question } from "../types/business";
 import { useBusinessProfile } from "../context/BusinessContext";
-import { generateAssessment } from "../services/assessment";
+import { getAssessmentService } from "../services/assessment";
 
 /* ── Question data ─────────────────────────────────────────────── */
 
@@ -173,6 +173,7 @@ export default function Consultation() {
   const [direction, setDirection] = useState(1);
   const [answers, setAnswers] = useState<Answers>({});
   const [showSummary, setShowSummary] = useState(false);
+  const [isGenerating, setIsGenerating] = useState(false);
   const navigate = useNavigate();
   const { setProfile, setAssessment } = useBusinessProfile();
 
@@ -210,12 +211,25 @@ export default function Consultation() {
 
   const progress = ((step + 1) / totalSteps) * 100;
 
-  const handleLaunchDashboard = useCallback(() => {
+  const handleLaunchDashboard = useCallback(async () => {
     const profile = buildProfile(answers, questions);
-    const assessment = generateAssessment(profile);
-    setProfile(profile);
-    setAssessment(assessment);
-    navigate("/dashboard", { state: { profile, assessment } });
+    setIsGenerating(true);
+    try {
+      const service = getAssessmentService();
+      const assessment = await service.generate(profile);
+      setProfile(profile);
+      setAssessment(assessment);
+      navigate("/dashboard", { state: { profile, assessment } });
+    } catch {
+      // Fallback: shouldn't happen since service handles its own errors,
+      // but just in case, navigate without assessment
+      const { generateAssessment } = await import("../services/assessment");
+      setProfile(profile);
+      setAssessment(generateAssessment(profile));
+      navigate("/dashboard");
+    } finally {
+      setIsGenerating(false);
+    }
   }, [answers, setProfile, setAssessment, navigate]);
 
   /* ── Summary screen ──────────────────────────────────────────── */
@@ -292,10 +306,20 @@ export default function Consultation() {
               </button>
               <button
                 onClick={handleLaunchDashboard}
-                className="inline-flex items-center gap-2 rounded-full bg-gradient-emerald px-8 py-3.5 text-base font-semibold text-white shadow-lg hover:shadow-xl transition-all hover:opacity-90"
+                disabled={isGenerating}
+                className="inline-flex items-center gap-2 rounded-full bg-gradient-emerald px-8 py-3.5 text-base font-semibold text-white shadow-lg hover:shadow-xl transition-all disabled:opacity-60 disabled:cursor-wait"
               >
-                Launch Dashboard
-                <ArrowRight size={18} />
+                {isGenerating ? (
+                  <>
+                    <Loader2 size={18} className="animate-spin" />
+                    Generating...
+                  </>
+                ) : (
+                  <>
+                    Launch Dashboard
+                    <ArrowRight size={18} />
+                  </>
+                )}
               </button>
               <a
                 href="/"

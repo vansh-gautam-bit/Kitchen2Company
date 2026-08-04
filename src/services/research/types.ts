@@ -35,4 +35,9 @@ export interface BrightDataResearchConfig {
   enabled: boolean;
   /** Base URL of the server-side proxy (Supabase Edge Function). */
   apiEndpoint: string;
+  /**
+   * Supabase publishable key sent in the `apikey` header so the Edge
+   * Function can authorise the request (auth: "publishable").
+   */
+  publishableKey: string;
 }

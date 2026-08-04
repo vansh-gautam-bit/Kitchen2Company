@@ -54,7 +54,10 @@ export class BrightDataResearchService implements ResearchService {
     try {
       const response = await fetch(this.config.apiEndpoint, {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
+        headers: {
+          "Content-Type": "application/json",
+          apikey: this.config.publishableKey,
+        },
         body: JSON.stringify({ assessment }),
         signal,
       });
