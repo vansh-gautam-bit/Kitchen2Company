@@ -71,6 +71,19 @@ export interface Resource {
   description: string;
 }
 
+export interface AiConfidence {
+  /** Confidence score 0–100 */
+  score: number;
+  /** Human-readable label: "High Confidence", "Medium Confidence", "Low Confidence" */
+  label: string;
+  /** Short explanation of the confidence level */
+  explanation: string;
+  /** Points supporting high confidence */
+  supportingPoints: string[];
+  /** Factors that reduce confidence */
+  concerns: string[];
+}
+
 export interface BusinessAssessment {
   /** The business structure recommended for this profile */
   recommendedBusinessStructure: BusinessStructure;
@@ -92,4 +105,16 @@ export interface BusinessAssessment {
 
   /** Official government portals and other helpful resources */
   resources: Resource[];
+
+  /** AI confidence in the assessment (added in v2) */
+  aiConfidence?: AiConfidence;
+
+  /** Estimated timeline to launch, e.g. "4–8 weeks" */
+  estimatedLaunchTimeline?: string;
+
+  /** Estimated compliance cost range, e.g. "₹5,000 – ₹15,000" */
+  estimatedComplianceCost?: string;
+
+  /** Structured reasoning summary connecting profile answers to recommendations */
+  reasoningSummary?: string[];
 }

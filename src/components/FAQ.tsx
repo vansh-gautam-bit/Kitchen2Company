@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { ChevronDown } from "lucide-react";
+import { SectionHeading } from "./ui";
 
 const faqs = [
   {
@@ -44,19 +45,11 @@ export default function FAQ() {
   return (
     <section id="faq" className="bg-bg-warm py-24 lg:py-32">
       <div className="mx-auto max-w-7xl px-6 lg:px-8">
-        {/* Section header */}
-        <div className="mx-auto max-w-2xl text-center">
-          <p className="text-sm font-semibold text-emerald-600 uppercase tracking-widest">
-            FAQ
-          </p>
-          <h2 className="mt-4 text-3xl sm:text-4xl lg:text-5xl font-bold tracking-tight text-text-primary">
-            Got questions? We've got answers.
-          </h2>
-          <p className="mt-6 text-lg text-text-muted">
-            Everything you need to know about starting your food business legally
-            in India.
-          </p>
-        </div>
+        <SectionHeading
+          eyebrow="FAQ"
+          title="Got questions? We've got answers."
+          subtitle="Everything you need to know about starting your food business legally in India."
+        />
 
         {/* FAQ items */}
         <div className="mx-auto mt-16 max-w-3xl space-y-3">

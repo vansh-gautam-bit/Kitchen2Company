@@ -49,6 +49,20 @@ export interface AIAssessmentResponse {
     url: string;
     description: string;
   }[];
+  /** AI confidence in the assessment */
+  aiConfidence: {
+    score: number;
+    label: string;
+    explanation: string;
+    supportingPoints: string[];
+    concerns: string[];
+  };
+  /** Estimated timeline to launch */
+  estimatedLaunchTimeline: string;
+  /** Estimated compliance cost range */
+  estimatedComplianceCost: string;
+  /** Reasoning bullets connecting profile to recommendations */
+  reasoningSummary: string[];
 }
 
 /**

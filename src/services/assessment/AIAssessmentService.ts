@@ -2,7 +2,7 @@
  *  AI Assessment Service                                           *
  *                                                                   *
  *  Async service that calls the Supabase Edge Function to generate *
- *  assessments via an LLM (OpenAI), validates the JSON response,   *
+ *  assessments via an LLM (AI/ML API), validates the JSON response,*
  *  and maps it to BusinessAssessment. Falls back to the            *
  *  RuleBasedAssessmentService if the AI call fails.                 *
  * ═══════════════════════════════════════════════════════════════════ */

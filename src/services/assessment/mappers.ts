@@ -11,6 +11,7 @@ import type {
   Registration,
   NextBestAction,
   Resource,
+  AiConfidence,
 } from "../../types/business";
 import type { AIAssessmentResponse } from "./types";
 
@@ -65,6 +66,18 @@ export function mapAIResponseToAssessment(
     description: r.description,
   }));
 
+  // Map new fields with backward-compatible defaults
+  let aiConfidence: AiConfidence | undefined;
+  if (ai.aiConfidence) {
+    aiConfidence = {
+      score: Math.min(99, Math.max(30, Math.round(ai.aiConfidence.score))),
+      label: ai.aiConfidence.label,
+      explanation: ai.aiConfidence.explanation,
+      supportingPoints: ai.aiConfidence.supportingPoints,
+      concerns: ai.aiConfidence.concerns,
+    };
+  }
+
   return {
     recommendedBusinessStructure: structure,
     explanation: ai.explanation,
@@ -73,5 +86,9 @@ export function mapAIResponseToAssessment(
     readinessMessage: ai.readinessMessage,
     nextBestAction,
     resources,
+    aiConfidence,
+    estimatedLaunchTimeline: ai.estimatedLaunchTimeline,
+    estimatedComplianceCost: ai.estimatedComplianceCost,
+    reasoningSummary: ai.reasoningSummary,
   };
 }

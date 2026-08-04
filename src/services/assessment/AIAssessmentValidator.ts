@@ -118,5 +118,44 @@ export function validateAIAssessmentResponse(
     }
   }
 
+  // Check aiConfidence (new fields — warn but don't fail for backward compat)
+  if (r.aiConfidence !== undefined && r.aiConfidence !== null) {
+    if (typeof r.aiConfidence !== "object") {
+      return { ok: false, error: '"aiConfidence" is not an object' };
+    }
+    const ac = r.aiConfidence as Record<string, unknown>;
+    for (const f of ["score", "label", "explanation", "supportingPoints", "concerns"]) {
+      if (ac[f] === undefined) {
+        return { ok: false, error: `Missing field in aiConfidence: "${f}"` };
+      }
+    }
+    if (typeof ac.score !== "number") {
+      return { ok: false, error: '"aiConfidence.score" is not a number' };
+    }
+    if (!Array.isArray(ac.supportingPoints)) {
+      return { ok: false, error: '"aiConfidence.supportingPoints" is not an array' };
+    }
+    if (!Array.isArray(ac.concerns)) {
+      return { ok: false, error: '"aiConfidence.concerns" is not an array' };
+    }
+  }
+
+  // Check estimatedLaunchTimeline (optional but validate if present)
+  if (r.estimatedLaunchTimeline !== undefined && typeof r.estimatedLaunchTimeline !== "string") {
+    return { ok: false, error: '"estimatedLaunchTimeline" is not a string' };
+  }
+
+  // Check estimatedComplianceCost (optional but validate if present)
+  if (r.estimatedComplianceCost !== undefined && typeof r.estimatedComplianceCost !== "string") {
+    return { ok: false, error: '"estimatedComplianceCost" is not a string' };
+  }
+
+  // Check reasoningSummary (optional but validate if present)
+  if (r.reasoningSummary !== undefined) {
+    if (!Array.isArray(r.reasoningSummary)) {
+      return { ok: false, error: '"reasoningSummary" is not an array' };
+    }
+  }
+
   return { ok: true, data: r as unknown as AIAssessmentResponse };
 }

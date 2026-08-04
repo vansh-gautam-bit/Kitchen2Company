@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { Menu, X } from "lucide-react";
+import { Button } from "./ui";
 
 const navLinks = [
   { label: "Features", href: "#why-k2c" },
@@ -40,12 +41,9 @@ export default function Navbar() {
               {link.label}
             </button>
           ))}
-          <a
-            href="/consultation"
-            className="inline-flex items-center rounded-full bg-gradient-emerald px-5 py-2.5 text-sm font-semibold text-white shadow-md hover:shadow-lg hover:opacity-90 transition-all"
-          >
+          <Button as="a" href="/consultation" size="md">
             Start My Business
-          </a>
+          </Button>
         </div>
 
         {/* Mobile toggle */}
@@ -70,12 +68,9 @@ export default function Navbar() {
               {link.label}
             </button>
           ))}
-          <a
-            href="/consultation"
-            className="block w-full text-center rounded-full bg-gradient-emerald px-5 py-3 text-sm font-semibold text-white shadow-md hover:shadow-lg transition-all"
-          >
+          <Button as="a" href="/consultation" size="md" className="w-full justify-center">
             Start My Business
-          </a>
+          </Button>
         </div>
       )}
     </nav>

@@ -1,4 +1,5 @@
 import { Lightbulb, Compass, Rocket } from "lucide-react";
+import { SectionHeading, Card } from "./ui";
 
 const steps = [
   {
@@ -28,28 +29,18 @@ export default function HowItWorks() {
   return (
     <section id="how-it-works" className="relative bg-bg-warm py-24 lg:py-32">
       <div className="mx-auto max-w-7xl px-6 lg:px-8">
-        {/* Section header */}
-        <div className="mx-auto max-w-2xl text-center">
-          <p className="text-sm font-semibold text-emerald-600 uppercase tracking-widest">
-            How It Works
-          </p>
-          <h2 className="mt-4 text-3xl sm:text-4xl lg:text-5xl font-bold tracking-tight text-text-primary">
-            From idea to launch in three simple steps
-          </h2>
-          <p className="mt-6 text-lg text-text-muted">
-            No paperwork headaches. No confusion. Just a clear path forward.
-          </p>
-        </div>
+        <SectionHeading
+          eyebrow="How It Works"
+          title="From idea to launch in three simple steps"
+          subtitle="No paperwork headaches. No confusion. Just a clear path forward."
+        />
 
         {/* Steps */}
         <div className="mt-16 grid gap-8 md:grid-cols-3">
           {steps.map((step) => {
             const Icon = step.icon;
             return (
-              <div
-                key={step.number}
-                className="group relative rounded-3xl bg-white p-8 shadow-sm hover:shadow-lg transition-all duration-300 border border-border-subtle hover:border-emerald-200"
-              >
+              <Card key={step.number} hover className="group relative p-8">
                 {/* Number */}
                 <span className="absolute top-6 right-6 text-5xl font-extrabold text-emerald-100/60 select-none">
                   {step.number}
@@ -67,7 +58,7 @@ export default function HowItWorks() {
                 <p className="mt-3 text-base text-text-muted leading-relaxed">
                   {step.description}
                 </p>
-              </div>
+              </Card>
             );
           })}
         </div>

@@ -45,11 +45,12 @@ export const config = {
    * AI-powered assessment configuration.
    *
    * When enabled, the Consultation page calls the Supabase Edge Function
-   * to generate assessments via an LLM (OpenAI). On failure, falls back
-   * to the deterministic rule-based engine.
+   * to generate assessments via an LLM (AI/ML API). On failure, falls
+   * back to the deterministic rule-based engine.
    *
-   * The OpenAI API key is a SECRET — stored in Supabase Secret Manager
-   * as OPENAI_API_KEY and read only inside the Edge Function.
+   * The AI/ML API key is a SECRET — stored in Supabase Secret Manager
+   * as OPENAI_API_KEY (backwards-compatible naming) and read only inside
+   * the Edge Function.
    */
   aiAssessment: {
     enabled: true,

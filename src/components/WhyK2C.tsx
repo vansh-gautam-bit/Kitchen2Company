@@ -1,4 +1,5 @@
 import { X, Check } from "lucide-react";
+import { SectionHeading } from "./ui";
 
 const withoutItems = [
   "Unsure which licenses you need",
@@ -18,19 +19,11 @@ export default function WhyK2C() {
   return (
     <section id="why-k2c" className="py-24 lg:py-32 bg-white">
       <div className="mx-auto max-w-7xl px-6 lg:px-8">
-        {/* Section header */}
-        <div className="mx-auto max-w-2xl text-center">
-          <p className="text-sm font-semibold text-emerald-600 uppercase tracking-widest">
-            Why Kitchen2Company
-          </p>
-          <h2 className="mt-4 text-3xl sm:text-4xl lg:text-5xl font-bold tracking-tight text-text-primary">
-            Don&#39;t go it alone
-          </h2>
-          <p className="mt-6 text-lg text-text-muted">
-            Navigating food business compliance alone is overwhelming. Let us
-            guide you through every step.
-          </p>
-        </div>
+        <SectionHeading
+          eyebrow="Why Kitchen2Company"
+          title="Don&#39;t go it alone"
+          subtitle="Navigating food business compliance alone is overwhelming. Let us guide you through every step."
+        />
 
         {/* Comparison cards */}
         <div className="mt-16 grid gap-8 lg:grid-cols-2">

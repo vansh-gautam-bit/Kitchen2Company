@@ -1,4 +1,5 @@
 import { ArrowRight, Play } from "lucide-react";
+import { Button, Badge } from "./ui";
 
 export default function Hero() {
   return (
@@ -15,10 +16,9 @@ export default function Hero() {
       <div className="relative mx-auto max-w-7xl px-6 lg:px-8 py-20 lg:py-32">
         <div className="mx-auto max-w-4xl text-center">
           {/* Badge */}
-          <div className="mb-8 inline-flex items-center rounded-full border border-emerald-200 bg-emerald-50 px-4 py-1.5 text-sm font-medium text-emerald-700">
-            <span className="mr-2 flex h-2 w-2 rounded-full bg-emerald-500 animate-pulse" />
+          <Badge dot variant="default" className="mb-8 text-sm font-medium px-4 py-1.5">
             India&#39;s #1 Food Business Launch Platform
-          </div>
+          </Badge>
 
           {/* Headline */}
           <h1 className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-extrabold tracking-tight text-text-primary leading-[1.1]">
@@ -36,17 +36,14 @@ export default function Hero() {
 
           {/* CTAs */}
           <div className="mt-10 flex flex-col sm:flex-row items-center justify-center gap-4">
-            <a
-              href="/consultation"
-              className="group inline-flex items-center gap-2 rounded-full bg-gradient-emerald px-8 py-4 text-lg font-semibold text-white shadow-lg hover:shadow-xl transition-all hover:opacity-90"
-            >
+            <Button as="a" href="/consultation" size="lg">
               Start My Business
               <ArrowRight size={20} className="transition-transform group-hover:translate-x-1" />
-            </a>
-            <button className="inline-flex items-center gap-2 rounded-full border-2 border-emerald-200 bg-white px-8 py-4 text-lg font-semibold text-emerald-700 hover:border-emerald-300 hover:bg-emerald-50/50 transition-all">
+            </Button>
+            <Button variant="secondary" size="lg">
               <Play size={20} className="fill-emerald-700" />
               Watch Demo
-            </button>
+            </Button>
           </div>
         </div>
 
