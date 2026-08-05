@@ -71,10 +71,6 @@ function isFoodTruck(profile: BusinessProfile): boolean {
   return profile.businessType === "food-truck";
 }
 
-function isCatering(profile: BusinessProfile): boolean {
-  return profile.businessType === "catering";
-}
-
 function isMealPrep(profile: BusinessProfile): boolean {
   return profile.businessType === "meal-prep";
 }
