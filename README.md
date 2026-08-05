@@ -148,7 +148,7 @@ Users can instantly download a comprehensive launch report containing:
 # 🏗 Architecture
 
 <p align="center">
-  <img src=arcNative.png width="450">
+  <img src="" width="900">
 </p>
 
 ---
@@ -183,9 +183,37 @@ Users can instantly download a comprehensive launch report containing:
 
 # 🔄 AI Workflow
 
-<p align="center">
-  <img src=Untitled.png width="450">
-</p>
+```text
+Business Profile
+
+↓
+
+DeepSeek AI
+
+↓
+
+Structured JSON Response
+
+↓
+
+Validation Layer
+
+↓
+
+Business Assessment
+
+↓
+
+Dashboard
+
+↓
+
+Roadmap
+
+↓
+
+PDF Report
+```
 
 ---
 
@@ -196,15 +224,15 @@ Kitchen2Company is designed with graceful degradation.
 If the AI service becomes unavailable:
 
 ```text
-              AI Failure
+AI Failure
 
-                  ↓
+↓
 
-         Rule-Based Assessment
+Rule-Based Assessment
 
-                  ↓
+↓
 
-      Application Continues Normally
+Application Continues Normally
 ```
 
 This ensures entrepreneurs always receive actionable guidance.

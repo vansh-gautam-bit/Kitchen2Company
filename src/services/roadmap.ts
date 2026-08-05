@@ -28,10 +28,6 @@ function needsGST(p: BusinessProfile): boolean {
     !!(p.growthGoal && scalingGoals.includes(p.growthGoal));
 }
 
-function isScaling(p: BusinessProfile): boolean {
-  return ["scale", "national-brand", "international"].includes(p.growthGoal);
-}
-
 function isHomeBased(p: BusinessProfile): boolean {
   return p.kitchenType === "home-kitchen" || p.businessType === "home-chef";
 }
@@ -42,10 +38,6 @@ function isCommercial(p: BusinessProfile): boolean {
 
 function isSolo(p: BusinessProfile): boolean {
   return p.teamSize === "solo";
-}
-
-function isSmallTeam(p: BusinessProfile): boolean {
-  return p.teamSize === "small";
 }
 
 function isMediumTeam(p: BusinessProfile): boolean {
@@ -145,7 +137,7 @@ function stepUDYAM(p: BusinessProfile, _a: BusinessAssessment): StepCandidate | 
   };
 }
 
-function stepIncorporation(p: BusinessProfile, a: BusinessAssessment): StepCandidate | null {
+function stepIncorporation(_p: BusinessProfile, a: BusinessAssessment): StepCandidate | null {
   if (!usesLLPorPvtLtd(a)) return null;
   const isPvtLtd = a.recommendedBusinessStructure.name.includes("Private Limited");
 
@@ -188,7 +180,7 @@ function stepFireNOC(p: BusinessProfile, _a: BusinessAssessment): StepCandidate 
   };
 }
 
-function stepCurrentAccount(p: BusinessProfile, _a: BusinessAssessment): StepCandidate | null {
+function stepCurrentAccount(_p: BusinessProfile, _a: BusinessAssessment): StepCandidate | null {
   return {
     id: "current-account",
     title: "Open Business Current Account",
@@ -250,7 +242,7 @@ function stepMarketing(p: BusinessProfile, _a: BusinessAssessment): StepCandidat
   };
 }
 
-function stepPilotLaunch(p: BusinessProfile, a: BusinessAssessment): StepCandidate | null {
+function stepPilotLaunch(p: BusinessProfile, _a: BusinessAssessment): StepCandidate | null {
   // Cloud kitchens, corporate catering, and large teams benefit from a soft launch
   if (!isCloudKitchen(p) && !isCorporateCatering(p) && !isLargeTeam(p)) return null;
   return {
