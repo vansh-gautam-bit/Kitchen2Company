@@ -12,7 +12,7 @@ Turn your home kitchen into a legally compliant food business using AI-powered b
 
 🎥 **Demo Video:** <https://youtube.com/your-demo-link>
 
-🌐 **Live Demo:** <https://your-live-demo-url>
+🌐 **Live Demo:** <https://alqqx4l4klbbm9eacngnbyxpf.nativelyai.app>
 
 </div>
 
