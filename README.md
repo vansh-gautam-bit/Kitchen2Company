@@ -10,7 +10,7 @@ Turn your home kitchen into a legally compliant food business using AI-powered b
 
 🚀 **Built using Natively AI**
 
-🎥 **Demo Video:** <https://youtube.com/your-demo-link>
+🎥 **Demo Video:** <https://youtu.be/dQrmNiAweWk>
 
 🌐 **Live Demo:** <https://alqqx4l4klbbm9eacngnbyxpf.nativelyai.app>
 
@@ -223,7 +223,7 @@ This ensures entrepreneurs always receive actionable guidance.
 # 🚀 Getting Started
 
 ```bash
-git clone https://github.com/<your-username>/Kitchen2Company.git
+git clone https://github.com/vansh-gautam-bit/kitchen2company.git
 
 cd Kitchen2Company
 
@@ -246,7 +246,7 @@ SUPABASE_URL=
 SUPABASE_ANON_KEY=
 ```
 
-> **Note:** `OPENAI_API_KEY` stores the AI/ML API key because the Edge Function uses the OpenAI-compatible API interface.
+> **Note:** `OPENAI_API_KEY` stores the "AI/ML API key" because the Edge Function uses the OpenAI-compatible API interface.
 
 ---
 
