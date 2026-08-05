@@ -147,32 +147,9 @@ Users can instantly download a comprehensive launch report containing:
 
 # 🏗 Architecture
 
-```text
-                    User
-                      │
-                      ▼
-          Multi-Step Consultation
-                      │
-                      ▼
-              Business Profile
-                      │
-                      ▼
-      DeepSeek V4 Flash (AI/ML API)
-                      │
-                      ▼
-          Business Assessment
-                      │
-          ┌───────────┴───────────┐
-          ▼                       ▼
-    Launch Roadmap       Bright Data Research
-          │                       │
-          └───────────┬───────────┘
-                      ▼
-               Dashboard Report
-                      │
-                      ▼
-                PDF Generation
-```
+<p align="center">
+  <img src=arcNative.png width="450">
+</p>
 
 ---
 
@@ -206,37 +183,9 @@ Users can instantly download a comprehensive launch report containing:
 
 # 🔄 AI Workflow
 
-```text
-Business Profile
-
-↓
-
-DeepSeek AI
-
-↓
-
-Structured JSON Response
-
-↓
-
-Validation Layer
-
-↓
-
-Business Assessment
-
-↓
-
-Dashboard
-
-↓
-
-Roadmap
-
-↓
-
-PDF Report
-```
+<p align="center">
+  <img src=Untitled.png width="450">
+</p>
 
 ---
 
@@ -247,15 +196,15 @@ Kitchen2Company is designed with graceful degradation.
 If the AI service becomes unavailable:
 
 ```text
-AI Failure
+              AI Failure
 
-↓
+                  ↓
 
-Rule-Based Assessment
+         Rule-Based Assessment
 
-↓
+                  ↓
 
-Application Continues Normally
+      Application Continues Normally
 ```
 
 This ensures entrepreneurs always receive actionable guidance.
