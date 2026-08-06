@@ -40,7 +40,7 @@ export default function Hero() {
               Start My Business
               <ArrowRight size={20} className="transition-transform group-hover:translate-x-1" />
             </Button>
-            <Button variant="secondary" size="lg" as="a" href="https://youtu.be/dQrmNiAweWk" target="_blank" rel="noopener noreferrer">
+            <Button variant="secondary" size="lg" onClick={() => window.open("https://youtu.be/dQrmNiAweWk", "_blank", "noopener,noreferrer")}>
               <Play size={20} className="fill-emerald-700" />
               Watch Demo
             </Button>
