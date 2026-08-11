@@ -312,7 +312,7 @@ supabase/
 
 # 🙏 Acknowledgements
 
-Built by **Team Tomb of Nazarick** for the ** AI Factory Hackathon**.
+Built by **Team Tomb of Nazarick** for the **AI Factory Hackathon**.
 
 Special thanks to the technologies and platforms powering this project:
 
