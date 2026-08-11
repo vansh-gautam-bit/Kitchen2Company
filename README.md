@@ -336,7 +336,8 @@ It helps us improve Kitchen2Company and continue building tools that empower asp
 ---
 
 <div align="center">
-###🍳 Kitchen2Company
+  
+### 🍳 Kitchen2Company
 
 **From Kitchen to Company — One Smart Step at a Time.**
 </div>
